@@ -73,7 +73,7 @@ namespace Hydr10n {
 				throw exception();
 			};
 
-			const auto new_path = path.string();
+			const auto new_path = path.u8string();
 			if (new_path.empty()) throw_exception(ENOENT);
 
 			ifstream file;
@@ -267,7 +267,7 @@ namespace Hydr10n {
 				return false;
 			}
 
-			auto new_path = (path / "").string();
+			auto new_path = (path / "").u8string();
 
 			const auto find_files = [&](const auto& find_files, uint64_t file_node_pos, uint32_t depth, error_occured_event_handler error_occured, file_found_event_handler file_found, enter_dir_event_handler enter_dir, leave_dir_event_handler leave_dir, void* param) {
 				try {
