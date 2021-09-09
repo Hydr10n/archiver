@@ -67,7 +67,7 @@ namespace Hydr10n {
 					data(const std::filesystem::directory_entry& dir_entry) : file_basic_info(dir_entry) {
 						const auto& path = dir_entry.path();
 						const auto filename = path.filename().u8string();
-						this->filename = filename == "" ? path.parent_path().filename().u8string() : filename;
+						this->filename = filename.empty() ? path.parent_path().filename().u8string() : filename;
 					}
 				};
 
