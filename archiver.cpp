@@ -15,12 +15,12 @@ using namespace std::filesystem;
 
 constexpr int EEMPTY = ~ENOTEMPTY;
 
-vector<string> split_path(const string& path) {
-	vector<string> filenames;
-
-	string temp;
+template <class T>
+vector<basic_string<T>> split_path(const basic_string<T>& path) {
+	vector<basic_string<T>> filenames;
+	basic_string<T> temp;
 	for (const auto ch : path) {
-		if (ch != filesystem::path::preferred_separator)
+		if (ch != static_cast<T>(filesystem::path::preferred_separator))
 			temp.push_back(ch);
 		else if (!temp.empty()) {
 			filenames.push_back(temp);
@@ -29,7 +29,6 @@ vector<string> split_path(const string& path) {
 	}
 	if (!temp.empty())
 		filenames.push_back(temp);
-
 	return filenames;
 };
 
@@ -89,8 +88,7 @@ namespace Hydr10n {
 				bool equal;
 				while (!(equal = data.filename == filenames[i]) && find_next(data))
 					;
-
-				if (!equal || (!data.is_dir && i != size - 1)) throw_exception(ENOENT);
+				if (!equal) throw_exception(ENOENT);
 
 				if (i < size - 1 || new_path.back() == filesystem::path::preferred_separator) {
 					if (m_file_node.first_child_offset) {
@@ -98,7 +96,7 @@ namespace Hydr10n {
 
 						read_node(file, data);
 					}
-					else throw_exception(i < size - i && size > 1 ? ENOENT : EEMPTY);
+					else throw_exception(i < size - 1 || !data.is_dir ? ENOENT : EEMPTY);
 				}
 			}
 		}
