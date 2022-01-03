@@ -97,7 +97,7 @@ namespace Hydr10n {
 				}
 			};
 
-			using error_occured_event_handler = bool(const std::filesystem::path& path, void* param);
+			using error_occurred_event_handler = bool(const std::filesystem::path& path, void* param);
 
 			using file_found_event_handler = bool(const std::filesystem::path& path, const find_file::data& data, void* param);
 
@@ -134,9 +134,9 @@ namespace Hydr10n {
 
 			bool hash(XXH64_hash_t& hash) const;
 
-			bool archive(const std::filesystem::path& path, error_occured_event_handler error_occured, file_found_event_handler file_found, enter_dir_event_handler enter_dir, void* param);
+			bool archive(const std::filesystem::path& path, error_occurred_event_handler error_occurred, file_found_event_handler file_found, enter_dir_event_handler enter_dir, void* param);
 
-			bool find_files(const std::filesystem::path& path, error_occured_event_handler error_occured, file_found_event_handler file_found, enter_dir_event_handler enter_dir, leave_dir_event_handler leave_dir, void* param) const;
+			bool find_files(const std::filesystem::path& path, error_occurred_event_handler error_occurred, file_found_event_handler file_found, enter_dir_event_handler enter_dir, leave_dir_event_handler leave_dir, void* param) const;
 
 		protected:
 			void write_node(const find_file::data& data) {

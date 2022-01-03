@@ -116,7 +116,7 @@ namespace Hydr10n {
 			return false;
 		}
 
-		bool archiver::archive(const path& path, error_occured_event_handler error_occured, file_found_event_handler file_found, enter_dir_event_handler enter_dir, void* param) {
+		bool archiver::archive(const path& path, error_occurred_event_handler error_occurred, file_found_event_handler file_found, enter_dir_event_handler enter_dir, void* param) {
 			const directory_entry dir_entry(path);
 			if (!dir_entry.exists()) {
 				errno = ENOENT;
@@ -258,7 +258,7 @@ namespace Hydr10n {
 			return true;
 		}
 
-		bool archiver::find_files(const path& path, error_occured_event_handler error_occured, file_found_event_handler file_found, enter_dir_event_handler enter_dir, leave_dir_event_handler leave_dir, void* param) const {
+		bool archiver::find_files(const path& path, error_occurred_event_handler error_occurred, file_found_event_handler file_found, enter_dir_event_handler enter_dir, leave_dir_event_handler leave_dir, void* param) const {
 			if (!m_verified) {
 				errno = ENOENT;
 
@@ -267,7 +267,7 @@ namespace Hydr10n {
 
 			auto new_path = (path / "").u8string();
 
-			const auto find_files = [&](const auto& find_files, uint64_t file_node_pos, uint32_t depth, error_occured_event_handler error_occured, file_found_event_handler file_found, enter_dir_event_handler enter_dir, leave_dir_event_handler leave_dir, void* param) {
+			const auto find_files = [&](const auto& find_files, uint64_t file_node_pos, uint32_t depth, error_occurred_event_handler error_occurred, file_found_event_handler file_found, enter_dir_event_handler enter_dir, leave_dir_event_handler leave_dir, void* param) {
 				try {
 					const auto new_path_size = new_path.size();
 
@@ -281,7 +281,7 @@ namespace Hydr10n {
 
 							new_path += data.filename + static_cast<char>(path::preferred_separator);
 
-							if (!find_files(find_files, data.pos, depth + 1, error_occured, file_found, enter_dir, leave_dir, param)) return false;
+							if (!find_files(find_files, data.pos, depth + 1, error_occurred, file_found, enter_dir, leave_dir, param)) return false;
 
 							new_path.erase(new_path_size);
 
@@ -291,12 +291,12 @@ namespace Hydr10n {
 					} while (find.find_next(data));
 				}
 				catch (const ios_base::failure&) {
-					if (error_occured != nullptr) error_occured(path, param);
+					if (error_occurred != nullptr) error_occurred(path, param);
 					return false;
 				}
 				catch (...) {
 					if (errno && (errno != EEMPTY || !depth)) {
-						if (error_occured != nullptr) error_occured(path, param);
+						if (error_occurred != nullptr) error_occurred(path, param);
 						return false;
 					}
 				}
@@ -304,7 +304,7 @@ namespace Hydr10n {
 				return true;
 			};
 
-			return find_files(find_files, sizeof(header), 0, error_occured, file_found, enter_dir, leave_dir, param);
+			return find_files(find_files, sizeof(header), 0, error_occurred, file_found, enter_dir, leave_dir, param);
 		}
 	}
 }
